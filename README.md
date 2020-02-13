@@ -1,12 +1,8 @@
 # 脚手架工具创建字体图标
 
-## 安装前，如果不知道源和环境列表的配置，请移步<a href="http://10.0.225.88:30080/tchen/environment/wikis/npmjs">npmjs维基</a>
-1. registry源
- - sinopia
-
 ## 安装 
 ```javascript
-npm install @fee/font-generator -g
+npm install font-generator -g
 ```
 > 安装过程中可能会有报错，不影响实际使用
 
