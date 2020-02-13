@@ -1,0 +1,6 @@
+{
+  "fontName": "ConfigFont",
+  "style"   : "./dist/config/css/config.css",
+  "font"    : "./dist/config/config/fonts",
+  "svgFiles": "./assets/*.svg"
+}

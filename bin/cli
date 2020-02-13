@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+var program = require('commander');
+var package = require('../package');
+var path = require('path');
+var glob = require('glob');
+var generate = require('../lib/generate');
+var fs = require('fs');
+
+program
+  .version(package.version)
+  .usage('[options] <svgfiles ...>')
+  // .option('-a, --action <action>', '字体图标执行的动作，add,remove,update [add]', 'add')
+  .option('-n, --fontName <fontName>', '字体使用的文件名font-family [Fonticon]')
+  .option('-s, --style <file>', '指定字体图标的css路径和名称 [./font-icon.css]', './font-icon.css')
+  .option('-f, --font <path>', '字体文件生成的路径[./fonts]', './fonts')
+  .option('-c, --config <config>', '字体配置文件路径')
+  .parse(process.argv);
+
+const cwd = process.cwd();
+let baseDir,svgFilesRelativePath,fontName;
+let options = {};
+if(program.config){
+  const configFile = path.resolve(cwd, program.config) ;
+  const config = resolveConfig(configFile);
+  baseDir = path.dirname(configFile);
+  svgFilesRelativePath = config["svgFiles"] || program.args[0];
+  options.style = config["style"] || program.style;
+  options.fontPath = config["font"] || program.font;
+  fontName = config["fontName"] || program.fontName;
+} else{
+  baseDir = process.cwd();
+  svgFilesRelativePath = program.args[0];
+  options.style = program.style;
+  options.fontPath = program.font;
+  fontName = program.fontName;
+}
+const svgFilesAbsolutePath = path.resolve(baseDir, svgFilesRelativePath)
+const svgfiles = glob.sync(svgFilesAbsolutePath);
+
+
+
+generate(fontName, svgfiles, baseDir, options);
+
+function resolveConfig(file){
+  return JSON.parse(fs.readFileSync(file,'utf-8'));
+}
